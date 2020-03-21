@@ -11,7 +11,7 @@ How to use this class: This listener only displays output if
 choices made leading to an exception.
 
 There are some customization options available for the user, add these to
-your .jpf or config file. Usage: choice.<action>=<option>
+your .jpf or config file. Usage: `choice.<action>=<option>`
 
 * choice.excludes 
   * provide a comma separated list of types to exclude from the
