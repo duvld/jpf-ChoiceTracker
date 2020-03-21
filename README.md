@@ -14,16 +14,16 @@ There are some customization options available for the user, add these to
 your .jpf or config file. Usage: choice.<action>=<option>
 
 * choice.excludes 
- * provide a comma separated list of types to exclude from the
+  * provide a comma separated list of types to exclude from the
 tracker
 
 * choice.class 
- * provide a comma separated list of types to keep track of
+  * provide a comma separated list of types to keep track of
 (leave empty for all types)
 
 * choice.format 
- * choose between formats CG and CHOICE
+  * choose between formats CG and CHOICE
 
 * choice.show_location 
- * proivde a boolean to toggle on or off, shows location
+  * proivde a boolean to toggle on or off, shows location
 of choices, default is true
