@@ -67,7 +67,7 @@ public class ChoiceTracker extends ListenerAdapter implements PublisherExtension
 
 	protected PrintWriter writer;
 	private Class<?>[] cgClasses;
-	boolean isReportExtension;
+	private boolean isReportExtension;
 
 	private boolean showLocation;
 	private Format format;
@@ -111,7 +111,7 @@ public class ChoiceTracker extends ListenerAdapter implements PublisherExtension
 	/**
 	 * Sets the global collection of excluded strings.
 	 * 
-	 * @param String... excludedString
+	 * @param excludedString String... - array of strings to be excluded
 	 */
 	public void setExcludes(String... excludedString) {
 		excludes = excludedString;
@@ -121,7 +121,7 @@ public class ChoiceTracker extends ListenerAdapter implements PublisherExtension
 	 * Checks to see if the ChoiceGenerator in question is among the list of allowed
 	 * ChoiceGenerators, if no list is provided assume true for all choices.
 	 *
-	 * @param ChoiceGenerator<?> choiceGenerator
+	 * @param choiceGenerator ChoiceGenerator the ChoiceGenerator class
 	 */
 	private boolean isRelevantCG(ChoiceGenerator<?> choiceGenerator) {
 		if (cgClasses == null) {
@@ -202,9 +202,9 @@ public class ChoiceTracker extends ListenerAdapter implements PublisherExtension
 	 * Refactored duplicate printing logic for whether or not there are exclusions
 	 * Refactored from switch cases, breaks, and continues
 	 * 
-	 * @param choice
-	 * @param choiceGenerator
-	 * @param i
+	 * @param choice          Object - the current choice
+	 * @param choiceGenerator ChoiceGenerator - the ChoiceGenerator class
+	 * @param i               int - the current choice index
 	 */
 	private void printRelevant(Object choice, ChoiceGenerator<?> choiceGenerator, int i) {
 		String nextLine = null;

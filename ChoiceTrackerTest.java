@@ -2,14 +2,15 @@ import gov.nasa.jpf.util.test.TestJPF;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-
 import java.util.Random;
 
 import org.junit.Test;
 
 /**
  * Tests the ChoiceTracker listener. Tests the listener against all types Random
- * can generate (boolean, int, double, float, double)
+ * can generate (boolean, int, double, float, double).
+ * 
+ * Also tests for choices that result from multiple threads.
  *
  * @author Anji Tong
  */
@@ -28,7 +29,7 @@ public class ChoiceTrackerTest extends TestJPF {
 	/**
 	 * JPF properties.
 	 */
-	private static final String[] CONFIGURATION = { "+listener=gov.nasa.jpf.listener.ChoiceTracker",
+	private static final String[] CONFIGURATION = { "+listener=ChoiceTracker",
 			"+classpath=/home/anjitong/Dev/Eclipse/workspace/4315/bin",
 			"+@include=/home/anjitong/Dev/jpf/jpf-core/jpf.properties",
 			"+native_classpath=/home/anjitong/Dev/Eclipse/workspace/4315/bin", "+cg.enumerate_random=true",
@@ -181,6 +182,38 @@ public class ChoiceTrackerTest extends TestJPF {
 	}
 
 	/**
+	 * Tests ChoiceTracker listener on a choice that results from multiple threads that triggers propertyViolated
+	 */
+	@Test
+	public void cgConcurrencyTest() {
+		double nextChoice = random.nextLong();
+		PrintStream out = System.out;
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		System.setOut(new PrintStream(stream));
+		if (this.verifyUnhandledException("java.lang.RuntimeException", CONFIGURATION)) {
+			(new Thread() {
+				public void run() {
+					throw new RuntimeException();
+				}
+			}).start();
+			(new Thread() {
+				public void run() {
+					throw new RuntimeException();
+				}
+			}).start();
+		} else {
+			System.out.println("stream: " + stream.toString());
+			System.setOut(out);
+			TestJPF.assertTrue("Incorrect choice tracked, should have START", stream.toString().contains(
+					"ThreadChoiceFromSet {id:\"START\" ,1/2,isCascaded:false}"));
+			TestJPF.assertTrue("Incorrect choice tracked, should have LOCK", stream.toString().contains(
+					"ThreadChoiceFromSet {id:\"LOCK\" ,1/2,isCascaded:false}"));
+			TestJPF.assertTrue("Incorrect choice tracked, should have TERMINATE", stream.toString().contains(
+					"ThreadChoiceFromSet {id:\"TERMINATE\" ,1/2,isCascaded:false}"));
+		}
+	}
+
+	/**
 	 * Runs the test methods with the given names. If no names are given, all test
 	 * methods are run.
 	 *
@@ -190,4 +223,3 @@ public class ChoiceTrackerTest extends TestJPF {
 		runTestsOfThisClass(testMethods);
 	}
 }
-
