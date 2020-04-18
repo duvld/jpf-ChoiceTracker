@@ -40,30 +40,31 @@ public class Example {
 		if (random.nextDouble() > 0) {
 			throw new RuntimeException();
 		} else {
-			if (random.nextInt(2) == 0) {
 				throw new RuntimeException();
-			}
 		}
 	}
 }
 ```
 If we run the above with the following JPF configuration:
 ```
-target=Example                                                                
-classpath=/home/anjitong/Dev/Eclipse/workspace/4315/bin                         
-listener=ChoiceTracker                                                          
-native_classpath=/home/anjitong/Dev/Eclipse/workspace/4315/bin                  
-cg.enumerate_random=true                                                        
-choice.trace=  
+target=Example
+classpath=<path that contains Example.class>
+listener=ChoiceTracker
+cg.enumerate_random=true
+native_classpath=<path that contains ChoiceTracker.class>
+choice.trace=
 ```
 JPF would produce the following output:
 ```
+file trace name: 
+cannot write choice trace to file: 
+JavaPathfinder core system v8.0 (rev 26e11d1de726c19ba8ae10551e048ec0823aabc6) - (C) 2005-2014 United States Government. All rights reserved.
+
+
 ====================================================== system under test
 Example.main()
 
-====================================================== search started: 18/04/20 4:22 PM
-0
-2
+====================================================== search started: 18/04/20 4:34 PM
 // application: Example.main()
 // trace over all CG classes
 //------------------------- choice trace
@@ -76,27 +77,27 @@ Example.main()
 ====================================================== error 1
 gov.nasa.jpf.vm.NoUncaughtExceptionsProperty
 java.lang.RuntimeException
-	at Traversal.main(Traversal.java:9)
+	at Example.main(Example.java:7)
 
 
 ====================================================== snapshot #1
 thread java.lang.Thread:{id:0,name:main,status:RUNNING,priority:5,isDaemon:false,lockCount:0,suspendCount:0}
   call stack:
-	at Traversal.main(Traversal.java:9)
+	at Example.main(Example.java:7)
 
 
 ====================================================== results
-error #1: gov.nasa.jpf.vm.NoUncaughtExceptionsProperty "java.lang.RuntimeException  at Example.main(Trav..."
+error #1: gov.nasa.jpf.vm.NoUncaughtExceptionsProperty "java.lang.RuntimeException  at Example.main(Exampl..."
 
 ====================================================== statistics
 elapsed time:       00:00:00
 states:             new=2,visited=0,backtracked=0,end=0
 search:             maxDepth=2,constraints=0
 choice generators:  thread=1 (signal=0,lock=1,sharedRef=0,threadApi=0,reschedule=0), data=1
-heap:               new=374,released=2,maxLive=0,gcCycles=1
-instructions:       3219
+heap:               new=370,released=2,maxLive=0,gcCycles=1
+instructions:       3209
 max memory:         240MB
 loaded code:        classes=66,methods=1377
 
-====================================================== search finished: 18/04/20 4:22 PM
+====================================================== search finished: 18/04/20 4:34 PM
 ```
